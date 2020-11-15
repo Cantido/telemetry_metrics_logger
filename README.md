@@ -1,6 +1,6 @@
 # TelemetryMetricsLogger
 
-A ['telemetry_metrics'](https://github.com/beam-telemetry/telemetry_metrics) reporter that prints to the `Logger`.
+A [`telemetry_metrics`](https://github.com/beam-telemetry/telemetry_metrics) reporter that prints to the `Logger`.
 
 This is different from the built-in console reporter for two reasons:
 
