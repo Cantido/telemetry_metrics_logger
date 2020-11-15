@@ -9,8 +9,7 @@ This is different from the built-in console reporter for two reasons:
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `telemetry_metrics_logger` to your list of dependencies in `mix.exs`:
+This package can be installed by adding `telemetry_metrics_logger` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
@@ -20,9 +19,7 @@ def deps do
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/telemetry_metrics_logger](https://hexdocs.pm/telemetry_metrics_logger).
+The docs can be found at [https://hexdocs.pm/telemetry_metrics_logger](https://hexdocs.pm/telemetry_metrics_logger).
 
 ## Usage
 
