@@ -18,19 +18,20 @@ defmodule TelemetryMetricsLogger do
 
   Then, every sixty seconds, you will see a report like this:
 
-      12:31:54.492 [info]  Telemetry report 2020-11-09T17:48:00Z
-        Event [:vm, :memory]
-          Measurement "binary"
-            Last value: 100 B
-          Measurement "total"
-            Counter: 1
-        Event [:phoenix, :endpoint, :stop]
-          Measurement "duration"
-            Summary:
-              Average: 101 ms
-              Min: 52 ms
-              Max: 127 ms
-
+  ```log
+  12:31:54.492 [info]  Telemetry report 2020-11-09T17:48:00Z
+    Event [:vm, :memory]
+      Measurement "binary"
+        Last value: 100 B
+      Measurement "total"
+        Counter: 1
+    Event [:phoenix, :endpoint, :stop]
+      Measurement "duration"
+        Summary:
+          Average: 101 ms
+          Min: 52 ms
+          Max: 127 ms
+  ```
   """
 
   use GenServer
