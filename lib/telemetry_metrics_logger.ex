@@ -38,8 +38,6 @@ defmodule TelemetryMetricsLogger do
   require Logger
 
   def start_link(opts) do
-    server_opts = Keyword.take(opts, [:name])
-
     metrics =
       opts[:metrics] ||
         raise ArgumentError, "the :metrics option is required by #{inspect(__MODULE__)}"
@@ -49,7 +47,7 @@ defmodule TelemetryMetricsLogger do
     log_level = reporter_options |> Keyword.get(:log_level, :info)
     reporting_interval = reporter_options |> Keyword.get(:interval, 60)
 
-    GenServer.start_link(__MODULE__, {metrics, log_level, reporting_interval}, server_opts)
+    GenServer.start_link(__MODULE__, {metrics, log_level, reporting_interval}, name: __MODULE__)
   end
 
   def handle_event(event_name, measurements, metadata, _config) do
