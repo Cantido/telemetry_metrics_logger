@@ -36,7 +36,7 @@ defmodule TelemetryMetricsLoggerTest do
           Sum: 31415 μs
           Last value: 42 μs
           Summary:
-            Average: 18.0 μs
+            Average: 18 μs
             Max: 42 μs
             Min: 4 μs
           Distribution:

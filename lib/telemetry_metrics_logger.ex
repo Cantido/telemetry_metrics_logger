@@ -202,7 +202,7 @@ defmodule TelemetryMetricsLogger do
       avg = Enum.sum(report.distribution) / Enum.count(report.distribution)
       """
             Distribution:
-              mean: #{avg} #{unit_to_string def.unit}
+              mean: #{do_round(avg)} #{unit_to_string def.unit}
       """
     end
   end
@@ -211,14 +211,14 @@ defmodule TelemetryMetricsLogger do
     if is_nil(report[:last_value]) do
       "      Last value: No data!"
     else
-      "      Last value: #{report.last_value} #{unit_to_string def.unit}"
+      "      Last value: #{report.last_value |> do_round()} #{unit_to_string def.unit}"
     end
   end
 
   defp metric_text(%Telemetry.Metrics.Sum{} = def, report) do
     sum = Map.get(report, :sum, 0)
 
-    "      Sum: #{sum} #{unit_to_string def.unit}"
+    "      Sum: #{sum |> do_round()} #{unit_to_string def.unit}"
   end
 
   defp metric_text(%Telemetry.Metrics.Summary{} = def, report) do
@@ -230,11 +230,19 @@ defmodule TelemetryMetricsLogger do
       avg = Enum.sum(summary) / Enum.count(summary)
       """
             Summary:
-              Average: #{avg} #{unit_to_string def.unit}
-              Max: #{Enum.max(summary)} #{unit_to_string def.unit}
-              Min: #{Enum.min(summary)} #{unit_to_string def.unit}
+              Average: #{round(avg)} #{unit_to_string def.unit}
+              Max: #{Enum.max(summary) |> do_round()} #{unit_to_string def.unit}
+              Min: #{Enum.min(summary) |> do_round()} #{unit_to_string def.unit}
       """ |> String.trim_trailing()
     end
+  end
+
+  defp do_round(x) when is_float(x) do
+    Float.round(x, 3)
+  end
+
+  defp do_round(x) do
+    x
   end
 
   defp unit_to_string(:unit), do: ""
