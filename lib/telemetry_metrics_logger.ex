@@ -51,7 +51,7 @@ defmodule TelemetryMetricsLogger do
   end
 
   def handle_event(event_name, measurements, metadata, _config) do
-    GenServer.cast(__MODULE__,{:handle_event, event_name, measurements, metadata})
+    GenServer.cast(__MODULE__, {:handle_event, event_name, measurements, metadata})
   end
 
   @impl true
@@ -59,7 +59,7 @@ defmodule TelemetryMetricsLogger do
     Process.flag(:trap_exit, true)
     groups = Enum.group_by(metrics, & &1.event_name)
 
-    for {event, metrics} <- groups do
+    for {event, _metrics} <- groups do
       id = {__MODULE__, event, self()}
       :telemetry.attach(id, event, &handle_event/4, [])
     end
