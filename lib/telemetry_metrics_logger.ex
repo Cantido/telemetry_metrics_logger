@@ -71,6 +71,7 @@ defmodule TelemetryMetricsLogger do
       %{
         metric_definitions: groups,
         reporting_interval: reporting_interval,
+        log_level: log_level,
         report: %{}
       }
     }
