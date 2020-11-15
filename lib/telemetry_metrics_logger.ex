@@ -196,7 +196,7 @@ defmodule TelemetryMetricsLogger do
   defp metric_text(%Telemetry.Metrics.Distribution{} = def, report) do
     distribution = Map.get(report, :distribution, [])
 
-    if Enum.empty(distribution) do
+    if Enum.empty?(distribution) do
       "      Distribution: No data for distribution!"
     else
       avg = Enum.sum(report.distribution) / Enum.count(report.distribution)
