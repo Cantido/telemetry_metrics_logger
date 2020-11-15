@@ -107,7 +107,7 @@ defmodule TelemetryMetricsLogger do
     {:noreply, %{state | report: report}}
   end
 
-  defp update_report(event_name, {metric_def, measurement, tags}, report) do
+  defp update_report(_event_name, {metric_def, measurement, _tags}, report) do
     Map.update(
       report,
       metric_def.name,
@@ -158,6 +158,7 @@ defmodule TelemetryMetricsLogger do
     Map.take(tag_values, metric.tags)
   end
 
+  @impl true
   def handle_info(:report, state) do
     report = build_report(state, DateTime.utc_now())
     Logger.log(state.log_level, report)
