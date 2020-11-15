@@ -94,14 +94,17 @@ defmodule TelemetryMetricsLogger do
   def handle_cast({:handle_event, event_name, measurements, metadata}, state) do
     metric_defs_for_event = state.metric_definitions[event_name]
 
-    metric_defs_for_event
-    |> Enum.map(fn metric_def ->
-      measurement = extract_measurement(metric_def, measurements, metadata)
-      tags = extract_tags(metric_def, metadata)
-      {metric_def, measurement, tags}
-    end)
-    |> Enum.filter(fn {mdef, _m, _tags} -> keep?(mdef, metadata) end)
-    |> Enum.reduce(state.report, &update_report(event_name, &1, &2))
+    report =
+      metric_defs_for_event
+      |> Enum.map(fn metric_def ->
+        measurement = extract_measurement(metric_def, measurements, metadata)
+        tags = extract_tags(metric_def, metadata)
+        {metric_def, measurement, tags}
+      end)
+      |> Enum.filter(fn {mdef, _m, _tags} -> keep?(mdef, metadata) end)
+      |> Enum.reduce(state.report, &update_report(event_name, &1, &2))
+
+    {:noreply, %{state | report: report}}
   end
 
   defp update_report(event_name, {metric_def, measurement, tags}, report) do
