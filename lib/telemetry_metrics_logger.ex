@@ -65,7 +65,6 @@ defmodule TelemetryMetricsLogger do
       :telemetry.attach(id, event, &handle_event/4, [])
     end
 
-
     Process.send_after(self(), :report, reporting_interval * 1_000)
 
     {
@@ -157,11 +156,15 @@ defmodule TelemetryMetricsLogger do
     Map.take(tag_values, metric.tags)
   end
 
-  def handle_event(:report, state) do
+  def handle_info(:report, state) do
     report = build_report(state, DateTime.utc_now())
     Logger.log(state.log_level, report)
+
+    Process.send_after(self(), :report, state.reporting_interval * 1_000)
+    {:noreply, %{state | report: %{}}}
   end
 
+  @doc false
   def build_report(state, timestamp) do
     metric_def_groups = state.metric_definitions
 
