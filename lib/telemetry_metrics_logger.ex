@@ -81,7 +81,6 @@ defmodule TelemetryMetricsLogger do
   def terminate(_, state) do
     events =
       state.metric_definitions
-      |> Enum.group_by(&(&1.event_name))
       |> Map.keys()
 
     for event <- events do
