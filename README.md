@@ -14,7 +14,7 @@ This package can be installed by adding `telemetry_metrics_logger` to your list 
 ```elixir
 def deps do
   [
-    {:telemetry_metrics_logger, "~> 0.1.0"}
+    {:telemetry_metrics_logger, "~> 0.1"}
   ]
 end
 ```

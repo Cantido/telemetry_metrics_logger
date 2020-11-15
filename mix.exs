@@ -7,7 +7,7 @@ defmodule TelemetryMetricsLogger.MixProject do
       description: "A telemetry_metrics reporter that writes to the Logger",
       package: package(),
       docs: docs(),
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       deps: deps()
