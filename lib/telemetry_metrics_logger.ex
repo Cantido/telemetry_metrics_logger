@@ -12,25 +12,24 @@ defmodule TelemetryMetricsLogger do
         summary("phoenix.endpoint.stop.duration", unit: {:native, :millisecond})
       ]
 
-  A `Logger` reporter can be started as a child of your supervision tree as:
+  A this reporter can be started as a child of your supervision tree like this:
 
-      {TelemetryMetricsLoggerReporter, metrics: metrics, interval: 60}
+      {TelemetryMetricsLogger, metrics: metrics, interval: 60}
 
-  Every sixty seconds, you will see a report like this:
+  Then, every sixty seconds, you will see a report like this:
 
-      --- Telemetry report 2020-11-09T17:48:00Z ---
-      Event "vm.memory"
-        Measurement "binary"
-          last value: 100 bytes
-        Measurement "total"
-          counter: 1
-      Event "phoenix.endpoint.stop"
-        Measurement "duration"
-          Summary:
-            Average: 101 ms
-            Minimum: 52 ms
-            Maxiumum: 127 ms
-            Sample count: 238
+      12:31:54.492 [info]  Telemetry report 2020-11-09T17:48:00Z
+        Event [:vm, :memory]
+          Measurement "binary"
+            Last value: 100 B
+          Measurement "total"
+            Counter: 1
+        Event [:phoenix, :endpoint, :stop]
+          Measurement "duration"
+            Summary:
+              Average: 101 ms
+              Min: 52 ms
+              Max: 127 ms
 
   """
 
