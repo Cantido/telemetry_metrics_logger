@@ -178,7 +178,8 @@ defmodule TelemetryMetricsLogger do
       Enum.flat_map(measurement_groups, fn {measurement_name, defs} ->
         ["    Measurement \"#{measurement_name}\"" |
         Enum.map(defs, fn def ->
-          metric_text(def, state.report[def.name])
+          metric_report = Map.get(state.report, def.name, %{})
+          metric_text(def, metric_report)
         end)]
       end)]
     end)]
@@ -187,33 +188,52 @@ defmodule TelemetryMetricsLogger do
   end
 
   defp metric_text(%Telemetry.Metrics.Counter{}, report) do
-    "      Counter: #{report.counter}"
+    counter = Map.get(report, :counter, 0)
+    "      Counter: #{counter}"
   end
 
   defp metric_text(%Telemetry.Metrics.Distribution{} = def, report) do
-    avg = Enum.sum(report.distribution) / Enum.count(report.distribution)
-    """
-          Distribution:
-            mean: #{avg} #{unit_to_string def.unit}
-    """
+    distribution = Map.get(report, :distribution, [])
+
+    if Enum.empty(distribution) do
+      "      Distribution: No data for distribution!"
+    else
+      avg = Enum.sum(report.distribution) / Enum.count(report.distribution)
+      """
+            Distribution:
+              mean: #{avg} #{unit_to_string def.unit}
+      """
+    end
   end
 
   defp metric_text(%Telemetry.Metrics.LastValue{} = def, report) do
-    "      Last value: #{report.last_value} #{unit_to_string def.unit}"
+    if is_nil(report[:last_value]) do
+      "      Last value: No data!"
+    else
+      "      Last value: #{report.last_value} #{unit_to_string def.unit}"
+    end
   end
 
   defp metric_text(%Telemetry.Metrics.Sum{} = def, report) do
-    "      Sum: #{report.sum} #{unit_to_string def.unit}"
+    sum = Map.get(report, :sum, 0)
+
+    "      Sum: #{sum} #{unit_to_string def.unit}"
   end
 
   defp metric_text(%Telemetry.Metrics.Summary{} = def, report) do
-    avg = Enum.sum(report.summary) / Enum.count(report.summary)
-    """
-          Summary:
-            Average: #{avg} #{unit_to_string def.unit}
-            Max: #{Enum.max(report.summary)} #{unit_to_string def.unit}
-            Min: #{Enum.min(report.summary)} #{unit_to_string def.unit}
-    """ |> String.trim_trailing()
+    summary = Map.get(report, :summary, [])
+
+    if Enum.empty?(summary) do
+      "      Summary: No data for summary!"
+    else
+      avg = Enum.sum(summary) / Enum.count(summary)
+      """
+            Summary:
+              Average: #{avg} #{unit_to_string def.unit}
+              Max: #{Enum.max(summary)} #{unit_to_string def.unit}
+              Min: #{Enum.min(summary)} #{unit_to_string def.unit}
+      """ |> String.trim_trailing()
+    end
   end
 
   defp unit_to_string(:unit), do: ""
