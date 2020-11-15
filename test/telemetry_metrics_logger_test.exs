@@ -33,14 +33,14 @@ defmodule TelemetryMetricsLoggerTest do
       Event [:http, :request, :stop]
         Measurement "duration"
           Counter: 6
-          Sum: 31415 microsecond
-          Last value: 42 microsecond
+          Sum: 31415 μs
+          Last value: 42 μs
           Summary:
-            Average: 18.0 microsecond
-            Max: 42 microsecond
-            Min: 4 microsecond
+            Average: 18.0 μs
+            Max: 42 μs
+            Min: 4 μs
           Distribution:
-            mean: 18.0 microsecond
+            mean: 18.0 μs
     """ |> String.trim_trailing()
   end
 end

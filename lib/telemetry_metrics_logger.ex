@@ -213,5 +213,11 @@ defmodule TelemetryMetricsLogger do
   end
 
   defp unit_to_string(:unit), do: ""
-  defp unit_to_string(unit), do: to_string(unit)
+  defp unit_to_string(:second), do: "s"
+  defp unit_to_string(:millisecond), do: "ms"
+  defp unit_to_string(:microsecond), do: "μs"
+  defp unit_to_string(:nanosecond), do: "ns"
+  defp unit_to_string(:byte), do: "B"
+  defp unit_to_string(:kilobyte), do: "kB"
+  defp unit_to_string(:megabyte), do: "MB"
 end
