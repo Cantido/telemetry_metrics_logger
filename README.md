@@ -68,6 +68,11 @@ I follow Elixir's tenet of bad documentation being a bug,
 so if anything is unclear, please [file an issue](https://github.com/Cantido/telemetry_metrics_logger/issues/new)!
 Ideally, my answer to your question will be in an update to the docs.
 
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for all the details you could ever want about helping me with this project.
+
+Note that this project is released with a Contributor [Code of Conduct](code_of_conduct.md).
+By participating in this project you agree to abide by its terms.
+
 ## License
 
 MIT License
