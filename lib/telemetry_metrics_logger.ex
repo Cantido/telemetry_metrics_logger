@@ -14,7 +14,7 @@ defmodule TelemetryMetricsLogger do
 
   A this reporter can be started as a child of your supervision tree like this:
 
-      {TelemetryMetricsLogger, metrics: metrics, interval: 60}
+      {TelemetryMetricsLogger, metrics: metrics, reporter_options: [interval: 60]}
 
   Then, every sixty seconds, you will see a report like this:
 
