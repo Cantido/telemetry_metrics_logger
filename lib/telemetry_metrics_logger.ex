@@ -117,8 +117,13 @@ defmodule TelemetryMetricsLogger do
   end
 
   defp new_metric_value(%Telemetry.Metrics.Counter{}, _measurement), do: %{counter: 1}
-  defp new_metric_value(%Telemetry.Metrics.Distribution{}, measurement), do: %{distribution: [measurement]}
-  defp new_metric_value(%Telemetry.Metrics.LastValue{}, measurement), do: %{last_value: measurement}
+
+  defp new_metric_value(%Telemetry.Metrics.Distribution{}, measurement),
+    do: %{distribution: [measurement]}
+
+  defp new_metric_value(%Telemetry.Metrics.LastValue{}, measurement),
+    do: %{last_value: measurement}
+
   defp new_metric_value(%Telemetry.Metrics.Sum{}, measurement), do: %{sum: measurement}
   defp new_metric_value(%Telemetry.Metrics.Summary{}, measurement), do: %{summary: [measurement]}
 
@@ -135,7 +140,7 @@ defmodule TelemetryMetricsLogger do
   end
 
   defp update_metric_value(%Telemetry.Metrics.Sum{}, current_value, measurement) do
-    Map.update(current_value, :sum, measurement, &( &1 + measurement))
+    Map.update(current_value, :sum, measurement, &(&1 + measurement))
   end
 
   defp update_metric_value(%Telemetry.Metrics.Summary{}, current_value, measurement) do
@@ -171,19 +176,25 @@ defmodule TelemetryMetricsLogger do
   def build_report(state, timestamp) do
     metric_def_groups = state.metric_definitions
 
-    ["Telemetry report #{timestamp}:" |
-    Enum.flat_map(metric_def_groups, fn {event, defs} ->
-      measurement_groups = Enum.group_by(defs, &List.last(&1.name))
+    [
+      "Telemetry report #{timestamp}:"
+      | Enum.flat_map(metric_def_groups, fn {event, defs} ->
+          measurement_groups = Enum.group_by(defs, &List.last(&1.name))
 
-      ["  Event #{inspect event}" |
-      Enum.flat_map(measurement_groups, fn {measurement_name, defs} ->
-        ["    Measurement \"#{measurement_name}\"" |
-        Enum.map(defs, fn def ->
-          metric_report = Map.get(state.report, def.name, %{})
-          metric_text(def, metric_report)
-        end)]
-      end)]
-    end)]
+          [
+            "  Event #{inspect(event)}"
+            | Enum.flat_map(measurement_groups, fn {measurement_name, defs} ->
+                [
+                  "    Measurement \"#{measurement_name}\""
+                  | Enum.map(defs, fn def ->
+                      metric_report = Map.get(state.report, def.name, %{})
+                      metric_text(def, metric_report)
+                    end)
+                ]
+              end)
+          ]
+        end)
+    ]
     |> Enum.join("\n")
     |> String.trim_trailing()
   end
@@ -200,9 +211,10 @@ defmodule TelemetryMetricsLogger do
       "      Distribution: No data for distribution!"
     else
       avg = Enum.sum(report.distribution) / Enum.count(report.distribution)
+
       """
             Distribution:
-              mean: #{do_round(avg)} #{unit_to_string def.unit}
+              mean: #{do_round(avg)} #{unit_to_string(def.unit)}
       """
     end
   end
@@ -211,14 +223,14 @@ defmodule TelemetryMetricsLogger do
     if is_nil(report[:last_value]) do
       "      Last value: No data!"
     else
-      "      Last value: #{report.last_value |> do_round()} #{unit_to_string def.unit}"
+      "      Last value: #{report.last_value |> do_round()} #{unit_to_string(def.unit)}"
     end
   end
 
   defp metric_text(%Telemetry.Metrics.Sum{} = def, report) do
     sum = Map.get(report, :sum, 0)
 
-    "      Sum: #{sum |> do_round()} #{unit_to_string def.unit}"
+    "      Sum: #{sum |> do_round()} #{unit_to_string(def.unit)}"
   end
 
   defp metric_text(%Telemetry.Metrics.Summary{} = def, report) do
@@ -228,12 +240,14 @@ defmodule TelemetryMetricsLogger do
       "      Summary: No data for summary!"
     else
       avg = Enum.sum(summary) / Enum.count(summary)
+
       """
             Summary:
-              Average: #{round(avg)} #{unit_to_string def.unit}
-              Max: #{Enum.max(summary) |> do_round()} #{unit_to_string def.unit}
-              Min: #{Enum.min(summary) |> do_round()} #{unit_to_string def.unit}
-      """ |> String.trim_trailing()
+              Average: #{round(avg)} #{unit_to_string(def.unit)}
+              Max: #{Enum.max(summary) |> do_round()} #{unit_to_string(def.unit)}
+              Min: #{Enum.min(summary) |> do_round()} #{unit_to_string(def.unit)}
+      """
+      |> String.trim_trailing()
     end
   end
 
