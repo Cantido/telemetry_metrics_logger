@@ -24,7 +24,7 @@ defmodule TelemetryMetricsLogger.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:telemetry_metrics, "~> 0.5"},
+      {:telemetry_metrics, "~> 1.0"},
       {:ex_doc, "~> 0.14", only: :dev, runtime: false}
     ]
   end
