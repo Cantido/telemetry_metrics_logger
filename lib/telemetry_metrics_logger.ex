@@ -61,7 +61,7 @@ defmodule TelemetryMetricsLogger do
 
     for {event, _metrics} <- groups do
       id = {__MODULE__, event, self()}
-      :telemetry.attach(id, event, &handle_event/4, [])
+      :telemetry.attach(id, event, &__MODULE__.handle_event/4, [])
     end
 
     Process.send_after(self(), :report, reporting_interval * 1_000)
